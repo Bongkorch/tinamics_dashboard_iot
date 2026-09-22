@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { collectionGroup, onSnapshot } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
+import { db, auth } from '@/lib/firebase';
 import type { PlantStatus, RoomReading } from '@/types/domain';
 
 const STALE_AFTER_MS = 10 * 60 * 1000;
@@ -22,47 +23,73 @@ export function useRoomReadings() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log('Starting collectionGroup query for rooms...');
+    const authUnsubscribe = onAuthStateChanged(auth, async (user) => {
+      console.log('🔐 Auth state:', user?.email || 'not logged in');
 
-    const unsubscribe = onSnapshot(
-      collectionGroup(db, 'rooms'),
-      (snapshot) => {
-        console.log('✓ Received snapshot with', snapshot.docs.length, 'documents');
+      if (!user) {
+        console.warn('⚠️ User not logged in');
+        setError('Please log in to view data');
+        setLoading(false);
+        setRooms([]);
+        return;
+      }
 
-        const next: RoomReading[] = snapshot.docs.map((docSnap) => {
-          const data = docSnap.data() as Record<string, unknown>;
-          const plantId = docSnap.ref.parent.parent?.id ?? 'unknown';
-          const temp = Number(data.temp ?? 0);
-          const humi = Number(data.humi ?? 0);
-          const updatedAt = (data.updatedAt as string) ?? (data.ts as string) ?? new Date().toISOString();
+      try {
+        console.log('📂 Fetching plants...');
 
-          console.log('📊 Room:', { plantId, roomId: docSnap.id, temp, humi });
+        // Get all plants
+        const plantsRef = collection(db, 'plants');
+        const plantsSnap = await getDocs(plantsRef);
 
-          return {
-            plantId,
-            roomId: docSnap.id,
-            temp,
-            humi,
-            pm25: data.pm25 != null ? Number(data.pm25) : null,
-            sensorId: (data.sensorId as string) ?? null,
-            updatedAt,
-            status: deriveStatus(temp, humi, updatedAt),
-          };
-        });
+        console.log('Found', plantsSnap.docs.length, 'plants');
 
-        console.log('✓ Processed', next.length, 'rooms');
-        setRooms(next);
+        const allRooms: RoomReading[] = [];
+
+        // For each plant, get rooms
+        for (const plantDoc of plantsSnap.docs) {
+          const plantId = plantDoc.id;
+          console.log('🌱 Plant:', plantId);
+
+          const roomsRef = collection(db, 'plants', plantId, 'rooms');
+          const roomsSnap = await getDocs(roomsRef);
+
+          console.log('  Found', roomsSnap.docs.length, 'rooms');
+
+          // Process each room
+          for (const roomDoc of roomsSnap.docs) {
+            const roomId = roomDoc.id;
+            const data = roomDoc.data() as Record<string, unknown>;
+            const temp = Number(data.temp ?? 0);
+            const humi = Number(data.humi ?? 0);
+            const updatedAt = (data.updatedAt as string) ?? (data.ts as string) ?? new Date().toISOString();
+
+            console.log('  📊 Room:', { plantId, roomId, temp, humi });
+
+            allRooms.push({
+              plantId,
+              roomId,
+              temp,
+              humi,
+              pm25: data.pm25 != null ? Number(data.pm25) : null,
+              sensorId: (data.sensorId as string) ?? null,
+              updatedAt,
+              status: deriveStatus(temp, humi, updatedAt),
+            });
+          }
+        }
+
+        console.log('✓ Total rooms:', allRooms.length);
+        setRooms(allRooms);
         setLoading(false);
         setError(null);
-      },
-      (err) => {
-        console.error('❌ Firestore error:', err);
+      } catch (err: any) {
+        console.error('❌ Error:', err.message);
         setError(err.message);
         setLoading(false);
-      },
-    );
+      }
+    });
 
-    return () => unsubscribe();
+    return () => authUnsubscribe();
   }, []);
 
   return { rooms, loading, error };
