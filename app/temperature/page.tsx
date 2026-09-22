@@ -9,6 +9,10 @@ export default function TemperaturePage() {
   const { t } = usePreferences();
   const { rooms, loading, error } = useRoomReadings();
 
+  console.log('Rooms data:', rooms);
+  console.log('Loading:', loading);
+  console.log('Error:', error);
+  
   return (
     <div className="space-y-6">
       <PageHeader title={t.temperature.title} description={t.temperature.desc} />

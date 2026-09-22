@@ -22,15 +22,22 @@ export function useRoomReadings() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log('Starting collectionGroup query for rooms...');
+
     const unsubscribe = onSnapshot(
       collectionGroup(db, 'rooms'),
       (snapshot) => {
+        console.log('✓ Received snapshot with', snapshot.docs.length, 'documents');
+
         const next: RoomReading[] = snapshot.docs.map((docSnap) => {
           const data = docSnap.data() as Record<string, unknown>;
           const plantId = docSnap.ref.parent.parent?.id ?? 'unknown';
           const temp = Number(data.temp ?? 0);
           const humi = Number(data.humi ?? 0);
           const updatedAt = (data.updatedAt as string) ?? (data.ts as string) ?? new Date().toISOString();
+
+          console.log('📊 Room:', { plantId, roomId: docSnap.id, temp, humi });
+
           return {
             plantId,
             roomId: docSnap.id,
@@ -42,11 +49,14 @@ export function useRoomReadings() {
             status: deriveStatus(temp, humi, updatedAt),
           };
         });
+
+        console.log('✓ Processed', next.length, 'rooms');
         setRooms(next);
         setLoading(false);
         setError(null);
       },
       (err) => {
+        console.error('❌ Firestore error:', err);
         setError(err.message);
         setLoading(false);
       },
