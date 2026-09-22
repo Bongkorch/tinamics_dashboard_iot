@@ -4,26 +4,62 @@ import { PageHeader } from '@/components/shared/PageHeader';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { usePreferences } from '@/contexts/AppPreferences';
 import { useRoomReadings } from '@/lib/useRoomReadings';
+import { Suspense } from 'react';
 
 export default function TemperaturePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <TemperatureContent />
+    </Suspense>
+  );
+}
+
+function TemperatureContent() {
   const { t } = usePreferences();
   const { rooms, loading, error } = useRoomReadings();
 
   console.log('Rooms data:', rooms);
   console.log('Loading:', loading);
   console.log('Error:', error);
-  
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <PageHeader title={t.temperature.title} description={t.temperature.desc} />
+        <div className="text-center text-muted">Loading sensor data...</div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <PageHeader title={t.temperature.title} description={t.temperature.desc} />
+        <div className="rounded-card border border-line bg-surface p-4 text-sm text-danger">
+          {error}
+        </div>
+      </div>
+    );
+  }
+
+  // Show empty state
+  if (rooms.length === 0) {
+    return (
+      <div className="space-y-6">
+        <PageHeader title={t.temperature.title} description={t.temperature.desc} />
+        <div className="rounded-card border border-line bg-surface p-8 text-center text-sm text-muted">
+          {t.temperature.empty}
+        </div>
+      </div>
+    );
+  }
+
+  // Show data
   return (
     <div className="space-y-6">
       <PageHeader title={t.temperature.title} description={t.temperature.desc} />
-
-      {error ? (
-        <div className="rounded-card border border-line bg-surface p-4 text-sm text-danger">{error}</div>
-      ) : null}
-
-      {!loading && rooms.length === 0 && !error ? (
-        <div className="rounded-card border border-line bg-surface p-8 text-center text-sm text-muted">{t.temperature.empty}</div>
-      ) : null}
 
       <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
         {rooms.map((room) => (
