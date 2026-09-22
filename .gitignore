@@ -5,6 +5,7 @@
 /.next/
 /out/
 /.open-next/
+build/
 
 # production
 /build
@@ -18,8 +19,13 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Misc
+.env.test.local
+.vscode-test
+
 # local env files
 .env*.local
+.env.*.local
 .env
 
 # vercel
@@ -28,3 +34,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Logs
+logs/
+*.log
+
+# Node-RED (if using locally)
+flows_cred.json
+flows.json
+node_modules/
+.node-red/
+
