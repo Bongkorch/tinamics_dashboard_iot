@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-canvas: #f4f6f8;
+  --bg-surface: #ffffff;
+  --bg-surface-soft: #f8fafc;
+  --text-primary: #17202a;
+  --text-secondary: #667085;
+  --border-default: #e4e7ec;
+  --brand-primary: #e44735;
+  --energy-solar: #f4b942;
+  --energy-battery: #2f9e71;
+  --energy-grid: #4f7cff;
+  --energy-load: #2b9ba5;
+  --status-success: #25855a;
+  --status-warning: #c17a11;
+  --status-danger: #c93d3d;
+  --radius-card: 14px;
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px rgba(16, 24, 40, 0.04);
+}
+
+* { box-sizing: border-box; }
+html { background: var(--bg-canvas); }
+body {
+  margin: 0;
+  background: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: Inter, "Noto Sans Thai", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+button, input, select { font: inherit; }
+a { color: inherit; text-decoration: none; }
+::selection { background: rgba(228, 71, 53, 0.16); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+:root {
+  --chart-grid: #edf0f2;
+  --tooltip-bg: #ffffff;
+  --tooltip-border: #e4e7ec;
+}
+
+html.dark {
+  --bg-canvas: #0f141a;
+  --bg-surface: #151b23;
+  --bg-surface-soft: #1b232d;
+  --text-primary: #f3f5f7;
+  --text-secondary: #9aa6b2;
+  --border-default: #2a3440;
+  --brand-primary: #ef6858;
+  --energy-solar: #f4b942;
+  --energy-battery: #47b987;
+  --energy-grid: #6f91ff;
+  --energy-load: #45b6bf;
+  --status-success: #55bd8b;
+  --status-warning: #e3a642;
+  --status-danger: #ef6b6b;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.18), 0 8px 24px rgba(0, 0, 0, 0.12);
+  --chart-grid: #27313c;
+  --tooltip-bg: #1b232d;
+  --tooltip-border: #34404d;
+}
