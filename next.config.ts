@@ -1,7 +1,16 @@
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
-  reactStrictMode: true,
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'export',
+  distDir: 'out',
+  trailingSlash: true,
 };
 
-export default nextConfig;
+module.exports = nextConfig;
+
+// import type { NextConfig } from 'next';
+
+// const nextConfig: NextConfig = {
+//   reactStrictMode: true,
+// };
+
+// export default nextConfig;
