@@ -4,7 +4,49 @@ import { PageHeader } from '@/components/shared/PageHeader';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { usePreferences } from '@/contexts/AppPreferences';
 import { useRoomReadings } from '@/lib/useRoomReadings';
+import { downloadCsv, toCsv } from '@/lib/csv';
+import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { Suspense } from 'react';
+import type { RoomReading } from '@/types/domain';
+
+type Dictionary = ReturnType<typeof usePreferences>['t'];
+
+function pad(n: number): string {
+  return String(n).padStart(2, '0');
+}
+
+function formatLocalDateTime(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+function formatDisplayTime(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  const ampm = d.getHours() < 12 ? 'AM' : 'PM';
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} ${ampm}`;
+}
+
+function exportRoomsCsv(rooms: RoomReading[], t: Dictionary) {
+  const statusLabel = (status: RoomReading['status']) =>
+    status === 'normal' ? t.common.normal : status === 'warning' ? t.common.warning : t.common.offline;
+
+  const csv = toCsv(rooms, [
+    { header: t.temperature.csv.plantId, value: (r) => r.plantId },
+    { header: t.temperature.csv.room, value: (r) => r.roomId },
+    { header: t.temperature.csv.status, value: (r) => statusLabel(r.status) },
+    { header: t.temperature.csv.temperature, value: (r) => r.temp.toFixed(1) },
+    { header: t.temperature.csv.humidity, value: (r) => r.humi.toFixed(1) },
+    { header: t.temperature.csv.pm25, value: (r) => (r.pm25 != null ? r.pm25.toFixed(1) : '') },
+    { header: t.temperature.csv.sensorId, value: (r) => r.sensorId ?? '' },
+    { header: t.temperature.csv.updatedAt, value: (r) => formatLocalDateTime(r.updatedAt) },
+  ]);
+
+  const now = new Date();
+  const filename = `temperature-${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}.csv`;
+  downloadCsv(filename, csv);
+}
 
 export default function TemperaturePage() {
   return (
@@ -59,7 +101,21 @@ function TemperatureContent() {
   // Show data
   return (
     <div className="space-y-6">
-      <PageHeader title={t.temperature.title} description={t.temperature.desc} />
+      <PageHeader
+        title={t.temperature.title}
+        description={t.temperature.desc}
+        action={
+          <button
+            type="button"
+            onClick={() => exportRoomsCsv(rooms, t)}
+            disabled={rooms.length === 0}
+            className="inline-flex items-center gap-2 rounded-card border border-line bg-surface px-3.5 py-2 text-sm font-medium text-ink shadow-card transition-colors hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
+            {t.common.exportCsv}
+          </button>
+        }
+      />
 
       <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
         {rooms.map((room) => (
@@ -89,7 +145,7 @@ function TemperatureContent() {
                 <p className="mt-1 text-sm font-semibold text-ink">{room.sensorId ?? '—'}</p>
               </div>
             </div>
-            <p className="mt-4 text-[11px] text-muted">{t.common.updated} {new Date(room.updatedAt).toLocaleString()}</p>
+            <p className="mt-4 text-[11px] text-muted">{t.common.updated} {formatDisplayTime(room.updatedAt)}</p>
           </article>
         ))}
       </div>
