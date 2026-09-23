@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
-import { db, auth } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import type { PlantStatus, RoomReading } from '@/types/domain';
 
 const STALE_AFTER_MS = 10 * 60 * 1000;
@@ -23,17 +22,7 @@ export function useRoomReadings() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const authUnsubscribe = onAuthStateChanged(auth, async (user) => {
-      console.log('🔐 Auth state:', user?.email || 'not logged in');
-
-      if (!user) {
-        console.warn('⚠️ User not logged in');
-        setError('Please log in to view data');
-        setLoading(false);
-        setRooms([]);
-        return;
-      }
-
+    const loadRooms = async () => {
       try {
         console.log('📂 Fetching plants...');
 
@@ -87,9 +76,9 @@ export function useRoomReadings() {
         setError(err.message);
         setLoading(false);
       }
-    });
+    };
 
-    return () => authUnsubscribe();
+    loadRooms();
   }, []);
 
   return { rooms, loading, error };
