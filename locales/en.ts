@@ -1,5 +1,5 @@
 export const en = {
-  nav: { dashboard: 'Dashboard', plants: 'Plants', temperature: 'Temperature', devices: 'Devices', alerts: 'Alerts', notifications: 'Notifications', settings: 'Settings', home: 'Home' },
+  nav: { dashboard: 'Dashboard', plants: 'Plants', temperature: 'Temperature', tempShort: 'Temp', devices: 'Devices', alerts: 'Alerts', notifications: 'Notifications', settings: 'Settings', home: 'Home' },
   common: { viewAll: 'View all', updated: 'Updated', live: 'Live', normal: 'Normal', warning: 'Warning', offline: 'Offline', critical: 'Critical', info: 'Info', acknowledged: 'Acknowledged', needsAttention: 'Needs attention', language: 'Language', theme: 'Theme', light: 'Light', dark: 'Dark', english: 'EN', thai: 'TH', save: 'Save changes', exportCsv: 'Export CSV' },
   header: { energyOperations: 'Energy Operations', smartMonitoring: 'Smart monitoring', notifications: 'Notifications', settings: 'Settings', workspace: 'Demo workspace' },
   sidebar: { prototype: 'Frontend prototype', prototypeDesc: 'Mock data only. Ready for API integration later.', console: 'MVP Console' },

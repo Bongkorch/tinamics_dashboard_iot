@@ -50,3 +50,4 @@ flows.json
 node_modules/
 .node-red/
 
+.env*

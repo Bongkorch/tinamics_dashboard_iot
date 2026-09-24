@@ -1,5 +1,5 @@
 export const th = {
-  nav: { dashboard: 'แดชบอร์ด', plants: 'โรงงาน', temperature: 'อุณหภูมิ', devices: 'อุปกรณ์', alerts: 'Alarm', notifications: 'แจ้งเตือน', settings: 'ตั้งค่า', home: 'หน้าหลัก' },
+  nav: { dashboard: 'แดชบอร์ด', plants: 'โรงงาน', temperature: 'อุณหภูมิ', tempShort: 'อุณหภูมิ', devices: 'อุปกรณ์', alerts: 'Alarm', notifications: 'แจ้งเตือน', settings: 'ตั้งค่า', home: 'หน้าหลัก' },
   common: { viewAll: 'ดูทั้งหมด', updated: 'อัปเดต', live: 'เรียลไทม์', normal: 'ปกติ', warning: 'คำเตือน', offline: 'ออฟไลน์', critical: 'วิกฤต', info: 'ข้อมูล', acknowledged: 'รับทราบแล้ว', needsAttention: 'ต้องตรวจสอบ', language: 'ภาษา', theme: 'ธีม', light: 'สว่าง', dark: 'มืด', english: 'EN', thai: 'TH', save: 'บันทึกการเปลี่ยนแปลง', exportCsv: 'ส่งออก CSV' },
   header: { energyOperations: 'การจัดการพลังงาน', smartMonitoring: 'ระบบติดตามอัจฉริยะ', notifications: 'แจ้งเตือน', settings: 'ตั้งค่า', workspace: 'พื้นที่ทำงานตัวอย่าง' },
   sidebar: { prototype: 'Frontend Prototype', prototypeDesc: 'ใช้ข้อมูลจำลองเท่านั้น พร้อมเชื่อมต่อ API ภายหลัง', console: 'MVP Console' },
