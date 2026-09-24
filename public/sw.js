@@ -1,4 +1,4 @@
-// Minimal app-shell service worker. Same-origin GETs only; API/Firebase (cross-origin) is never cached.
+// Minimal app-shell service worker. Same-origin GETs only; Firebase (cross-origin) and /api/* are never cached.
 const CACHE = 'tinamics-shell-v1';
 const SHELL = ['/', '/manifest.webmanifest', '/favicon.svg', '/icon-192.png', '/icon-512.png'];
 
@@ -16,6 +16,7 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
   if (req.method !== 'GET' || url.origin !== self.location.origin) return;
+  if (url.pathname.startsWith('/api/')) return;
 
   // Pages: network first, fall back to cache (then the cached shell) when offline.
   if (req.mode === 'navigate') {

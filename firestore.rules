@@ -1,0 +1,21 @@
+rules_version = '2';
+
+// MERGE INTO YOUR EXISTING RULES - do not deploy this file as-is.
+// This repo did not contain your current rules, and deploying replaces them entirely.
+// Only the roomReadingHistory block below is new; keep your existing plants/rooms rules.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Append-only history: create is the only write that could ever be allowed, update and
+    // delete are always denied. The app has no client login and history is written only by
+    // the recordRoomReading Cloud Function and read only by the export route (both use the
+    // Admin SDK, which bypasses these rules), so create is also denied for clients.
+    // If authorized clients ever need to append, replace `false` on create with e.g.
+    // `request.auth != null && request.auth.token.admin == true`.
+    match /roomReadingHistory/{docId} {
+      allow read: if false;
+      allow create: if false;
+      allow update, delete: if false;
+    }
+  }
+}

@@ -11,7 +11,13 @@ export const th = {
   plants: { title: 'โรงงาน', desc: 'ติดตามสถานที่ที่เชื่อมต่อทั้งหมดจากจุดเดียว', currentPower: 'กำลังไฟปัจจุบัน', today: 'วันนี้', selfConsumption: 'ใช้พลังงานเอง', battery: 'แบตเตอรี่' },
   temperature: {
     title: 'อุณหภูมิ', desc: 'ค่าความชื้นและอุณหภูมิแบบเรียลไทม์จากห้องที่เชื่อมต่อ', room: 'ห้อง', temperature: 'อุณหภูมิ', humidity: 'ความชื้น', pm25: 'PM2.5', sensorId: 'รหัสเซนเซอร์', empty: 'ยังไม่พบข้อมูลห้อง ตรวจสอบว่า Node-RED ส่งข้อมูลเข้า Firestore แล้ว',
-    csv: { plantId: 'รหัสโรงงาน', room: 'ห้อง', status: 'สถานะ', temperature: 'อุณหภูมิ (°C)', humidity: 'ความชื้น (%)', pm25: 'PM2.5 (µg/m³)', sensorId: 'รหัสเซนเซอร์', updatedAt: 'อัปเดตล่าสุด' }
+    csv: { plantId: 'รหัสโรงงาน', room: 'ห้อง', status: 'สถานะ', temperature: 'อุณหภูมิ (°C)', humidity: 'ความชื้น (%)', pm25: 'PM2.5 (µg/m³)', sensorId: 'รหัสเซนเซอร์', updatedAt: 'อัปเดตล่าสุด', recordedAt: 'บันทึกเมื่อ' },
+    export: {
+      scope: 'ขอบเขตการส่งออก', current: 'ปัจจุบัน', history: 'ประวัติ', from: 'จาก', to: 'ถึง', rangeInvalid: 'เลือกช่วงวันที่ที่ถูกต้อง ไม่เกิน 90 วัน',
+      preview: 'ตัวอย่างการส่งออก', close: 'ปิด', dragHandle: 'ลากลงเพื่อปิด', loading: 'กำลังโหลด…', failed: 'ส่งออกไม่สำเร็จ กรุณาลองอีกครั้ง', noRows: 'ไม่มีข้อมูลในช่วงนี้',
+      rowsNote: 'แสดง {shown} แถวแรกจากทั้งหมด {total} แถว ไฟล์เต็มมีข้อมูลทุกแถว',
+      share: 'แชร์', download: 'ดาวน์โหลด', copy: 'คัดลอก', copied: 'คัดลอกแล้ว', shareTitle: 'ส่งออกข้อมูลอุณหภูมิ'
+    }
   },
   devices: { title: 'อุปกรณ์', desc: 'สถานะและค่าการทำงานสำคัญของอุปกรณ์', device: 'อุปกรณ์', model: 'รุ่น', status: 'สถานะ', primaryValue: 'ค่าหลัก', updated: 'อัปเดต' },
   alerts: { title: 'Alarm', desc: 'เหตุการณ์การทำงานและสถานะระบบตามระดับความสำคัญ' },

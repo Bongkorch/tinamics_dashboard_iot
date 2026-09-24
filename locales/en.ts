@@ -11,7 +11,13 @@ export const en = {
   plants: { title: 'Plants', desc: 'Monitor all connected sites from one place', currentPower: 'Current Power', today: 'Today', selfConsumption: 'Self Consumption', battery: 'Battery' },
   temperature: {
     title: 'Temperature', desc: 'Live humidity and temperature readings from connected rooms', room: 'Room', temperature: 'Temperature', humidity: 'Humidity', pm25: 'PM2.5', sensorId: 'Sensor ID', empty: 'No rooms found yet. Check that Node-RED is publishing to Firestore.',
-    csv: { plantId: 'Plant ID', room: 'Room', status: 'Status', temperature: 'Temperature (°C)', humidity: 'Humidity (%)', pm25: 'PM2.5 (µg/m³)', sensorId: 'Sensor ID', updatedAt: 'Updated At' }
+    csv: { plantId: 'Plant ID', room: 'Room', status: 'Status', temperature: 'Temperature (°C)', humidity: 'Humidity (%)', pm25: 'PM2.5 (µg/m³)', sensorId: 'Sensor ID', updatedAt: 'Updated At', recordedAt: 'Recorded At' },
+    export: {
+      scope: 'Export scope', current: 'Current', history: 'History', from: 'From', to: 'To', rangeInvalid: 'Choose a valid range of up to 90 days.',
+      preview: 'Export preview', close: 'Close', dragHandle: 'Drag down to close', loading: 'Loading…', failed: 'Export failed. Please try again.', noRows: 'No rows in this range.',
+      rowsNote: 'Showing the first {shown} of {total} rows. The full file contains all rows.',
+      share: 'Share', download: 'Download', copy: 'Copy', copied: 'Copied', shareTitle: 'Temperature export'
+    }
   },
   devices: { title: 'Devices', desc: 'Essential device health and operating values', device: 'Device', model: 'Model', status: 'Status', primaryValue: 'Primary Value', updated: 'Updated' },
   alerts: { title: 'Alerts', desc: 'Prioritized operational events and system notices' },
