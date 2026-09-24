@@ -13,9 +13,9 @@ const styles = {
 };
 const icons = { normal: CheckCircleIcon, warning: ExclamationTriangleIcon, offline: SignalSlashIcon };
 
-export function StatusBadge({ status }: { status: Status }) {
+export function StatusBadge({ status, label: labelOverride }: { status: Status; label?: string }) {
   const { t } = usePreferences();
   const Icon = icons[status];
-  const label = status === 'normal' ? t.common.normal : status === 'warning' ? t.common.warning : t.common.offline;
+  const label = labelOverride ?? (status === 'normal' ? t.common.normal : status === 'warning' ? t.common.warning : t.common.offline);
   return <span className={cn('inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset', styles[status])}><Icon className="h-3.5 w-3.5" aria-hidden="true" />{label}</span>;
 }
